@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ethereum Miner Simulator</title>
   <style>
     body {
@@ -10,37 +10,29 @@
       background-color: #f4f4f9;
       margin: 0;
       padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      flex-direction: column;
     }
     .container {
       max-width: 600px;
-      margin: 20px;
+      margin: 50px auto;
       padding: 20px;
       background-color: white;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       text-align: center;
     }
-    h1 {
-      color: #333;
-    }
     .eth-logo {
       width: 100px;
       height: 100px;
-      margin: 20px auto;
-      background-image: url('https://cryptologos.cc/logos/ethereum-eth-logo.png');
-      background-size: cover;
-      background-position: center;
-      border-radius: 50%;
-      animation: rotateLogo 5s linear infinite;
+      margin-bottom: 20px;
+      animation: spin 5s linear infinite;
     }
-    @keyframes rotateLogo {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
     }
     button {
       padding: 10px 20px;
@@ -77,6 +69,7 @@
 </head>
 <body>
   <div class="container">
+    <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png?v=032" alt="Ethereum Logo" class="eth-logo">
     <h1>Ethereum Miner Simulator</h1>
     <div id="wallet-info">
       <button id="connect-btn">Connect Wallet</button>
@@ -95,7 +88,6 @@
       <button id="start-mining-btn" disabled>Start Mining</button>
       <button id="stop-mining-btn" style="display: none;">Stop Mining</button>
     </div>
-    <div class="eth-logo"></div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
@@ -160,3 +152,30 @@
         alert('Payment failed. Please try again.');
       }
     });
+
+    startMiningBtn.addEventListener('click', () => {
+      miningInterval = setInterval(() => {
+        minedAmount += miningRate;
+        const progress = Math.min((minedAmount / targetAmount) * 100, 100);
+        progressDisplay.textContent = progress.toFixed(2);
+        progressBar.style.width = `${progress}%`;
+        if (minedAmount >= targetAmount) {
+          clearInterval(miningInterval);
+          alert('Mining complete!');
+          startMiningBtn.disabled = true;
+          stopMiningBtn.style.display = 'none';
+        }
+      }, 1000);
+      startMiningBtn.disabled = true;
+      stopMiningBtn.style.display = 'inline-block';
+    });
+
+    stopMiningBtn.addEventListener('click', () => {
+      clearInterval(miningInterval);
+      startMiningBtn.disabled = false;
+      stopMiningBtn.style.display = 'none';
+      alert('Mining stopped');
+    });
+  </script>
+</body>
+</html>
