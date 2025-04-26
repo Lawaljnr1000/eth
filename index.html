@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ethereum Miner</title>
+    <title>Ethereum Miner Simulator</title>
     <style>
         body {
             margin: 0;
@@ -132,7 +132,7 @@
 </head>
 <body>
 
-    <h1>$Ethereum Miner$</h1>
+    <h1>Ethereum Miner Simulator</h1>
     <div class="coin">
         <div class="coin-face">
             <img src="https://appincoin.fra1.cdn.digitaloceanspaces.com/uploads/1745678681114-u5f72e.jpeg" alt="Coin Front">
@@ -158,6 +158,7 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <script>
         const connectButton = document.getElementById('connectButton');
         const startButton = document.getElementById('startButton');
@@ -202,12 +203,6 @@
             if (isConnected) {
                 paymentModal.style.display = 'block';
             } else {
-                alert('Please connect your wallet first.');
-            }
-        });
-
-        confirmPaymentButton.addEventListener('click', () => {
-            // Simulate payment confirmation
-           
+                alert('Please connect your wallet
 ::contentReference[oaicite:0]{index=0}
  
