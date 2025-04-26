@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ethereum Miner Simulator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:disabled {
+      background-color: #ccc;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    p {
+      font-size: 16px;
+    }
+    .progress-bar {
+      width: 100%;
+      height: 20px;
+      background-color: #e0e0e0;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    .progress-bar span {
+      display: block;
+      height: 100%;
+      background-color: #76c7c0;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Ethereum Miner Simulator</h1>
+    <div id="wallet-info">
+      <button id="connect-btn">Connect Wallet</button>
+      <p id="wallet-address"></p>
+    </div>
+    <div id="mining-info" style="display: none;">
+      <p>Mining Progress: <span id="progress">0</span>%</p>
+      <div class="progress-bar">
+        <span id="progress-bar" style="width: 0%;"></span>
+      </div>
+      <button id="start-mining-btn">Start Mining</button>
+      <button id="stop-mining-btn" style="display: none;">Stop Mining</button>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+  <script>
+    const connectBtn = document.getElementById('connect-btn');
+    const walletAddressDisplay = document.getElementById('wallet-address');
+    const startMiningBtn = document.getElementById('start-mining-btn');
+    const stopMiningBtn = document.getElementById('stop-mining-btn');
+    const progressDisplay = document.getElementById('progress');
+    const progressBar = document.getElementById('progress-bar');
+
+    let web3;
+    let userAccount;
+    let miningInterval;
+    let minedAmount = 0;
+    const targetAmount = 0.0099;
+    const miningRate = 0.00000000382; // ETH per second
+
+    connectBtn.addEventListener('click', async () => {
+      if (window.ethereum) {
+        try {
+          web3 = new Web3(window.ethereum);
+          await window.ethereum.request({ method: 'eth_requestAccounts' });
+          const accounts = await web3.eth.getAccounts();
+          userAccount = accounts[0];
+          walletAddressDisplay.textContent = `Connected: ${userAccount}`;
+          document.getElementById('wallet-info').style.display = 'none';
+          document.getElementById('mining-info').style.display = 'block';
+        } catch (error) {
+          console.error('User denied account access');
+        }
+      } else {
+        alert('Please install MetaMask to use this feature');
+      }
+    });
+
+    startMiningBtn.addEventListener('click', () => {
+      miningInterval = setInterval(() => {
+        minedAmount += miningRate;
+        const progress = Math.min((minedAmount / targetAmount) * 100, 100);
+        progressDisplay.textContent = progress.toFixed(2);
+        progressBar.style.width = `${progress}%`;
+        if (minedAmount >= targetAmount) {
+          clearInterval(miningInterval);
+          alert('Mining complete!');
+        }
+      }, 1000);
+      startMiningBtn.disabled = true;
+      stopMiningBtn.style.display = 'inline-block';
+    });
+
+    stopMiningBtn.addEventListener('click', () => {
+      clearInterval(miningInterval);
+      startMiningBtn.disabled = false;
+      stopMiningBtn.style.display = 'none';
+      alert('Mining stopped');
+    });
+  </script>
+</body>
+</html>
